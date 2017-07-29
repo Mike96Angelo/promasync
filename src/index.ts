@@ -31,7 +31,7 @@ export const Async = {
     }
   },
 
-  async eachLimit(arr: any[], limit: number, iterator: Iterator) {
+  async eachLimit(limit: number, arr: any[], iterator: Iterator) {
     if (limit < 1) {
       throw new Error('limit must be greater then 0.')
     }
@@ -84,7 +84,7 @@ export const Async = {
     return results
   },
 
-  async filterLimit(arr: any[], limit: number, iterator: Iterator): IteratorResults {
+  async filterLimit(limit: number, arr: any[], iterator: Iterator): IteratorResults {
     if (limit < 1) {
       throw new Error('limit must be greater then 0.')
     }
@@ -136,7 +136,7 @@ export const Async = {
     return results
   },
 
-  async mapLimit(arr: any[], limit: number, iterator: Iterator): IteratorResults {
+  async mapLimit(limit: number, arr: any[], iterator: Iterator): IteratorResults {
     if (limit < 1) {
       throw new Error('limit must be greater then 0.')
     }
@@ -196,7 +196,7 @@ export const Async = {
     return results
   },
 
-  async parallelLimit(tasks: Task[], limit: number): TaskResults {
+  async parallelLimit(limit: number, tasks: Task[]): TaskResults {
     if (limit < 1) {
       throw new Error('limit must be greater then 0.')
     }
