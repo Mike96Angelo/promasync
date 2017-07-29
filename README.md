@@ -7,56 +7,80 @@ $ npm install promasync --save
 imports
 ```javascript
 // import: es3
-var Async = require('promasync/es3').Async
+var Async = require('promasync/es3')
 // typescript
-import {Async} from 'promasync/es3'
+import * as Async from 'promasync/es3'
 
 // import: es5
-var Async = require('promasync/es5').Async
+var Async = require('promasync/es5')
 // typescript
-import {Async} from 'promasync/es5'
+import * as Async from 'promasync/es5'
 
 // import: es2015 (default)
-var Async = require('promasync').Async
-var Async = require('promasync/es2015').Async
+var Async = require('promasync')
+var Async = require('promasync/es2015')
 // typescript
-import {Async} from 'promasync'
-import {Async} from 'promasync/es2015'
+import * as Async from 'promasync'
+import * as Async from 'promasync/es2015'
 
 // import: es2016
-var Async = require('promasync/es2016').Async
+var Async = require('promasync/es2016')
 // typescript
-import {Async} from 'promasync/es2016'
+import * as Async from 'promasync/es2016'
 
 // import: es2017
-var Async = require('promasync/es2017').Async
+var Async = require('promasync/es2017')
 // typescript
-import {Async} from 'promasync/es2017'
+import * as Async from 'promasync/es2017'
 ```
 
 ```javascript
-Async.each(arr: any[], iterator: (item: any) => Promise<any>): Promise<void>;
+/*****************
+ ** Collections **
+ *****************/
 
-Async.eachSeries(arr: any[], iterator: (item: any) => Promise<any>): Promise<void>;
+Async.each<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<void>;
+Async.eachSeries<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<void>;
+Async.eachLimit<T>(limit: number, array: T[], iterator: (item: T) => Promise<T>): Promise<void>;
 
-Async.eachLimit(limit: number, arr: any[], iterator: (item: any) => Promise<any>): Promise<void>;
+Async.filter<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
+Async.filterSeries<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
+Async.filterLimit<T>(limit: number, array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
 
-Async.filter(arr: any[], iterator: (item: any) => Promise<any>): Promise<any[]>;
+Async.map<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
+Async.mapSeries<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
+Async.mapLimit<T>(limit: number, array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
 
-Async.filterSeries(arr: any[], iterator: (item: any) => Promise<any>): Promise<any[]>;
+/******************
+ ** Control Flow **
+ ******************/
 
-Async.filterLimit(limit: number, arr: any[], iterator: (item: any) => Promise<any>): Promise<any[]>;
+Async.run<T>(tasks: (() => Promise<T>)[]): Promise<T[]>;
+Async.runSeries<T>(tasks: (() => Promise<T>)[]): Promise<T[]>;
+Async.runLimit<T>(limit: number, tasks: (() => Promise<T>)[]): Promise<T[]>;
 
-Async.map(arr: any[], iterator: (item: any) => Promise<any>): Promise<any[]>;
+Async.queue<T>(limit: number, worker: ((task: T) => Promise<T>)): Queue<T>;
 
-Async.mapSeries(arr: any[], iterator: (item: any) => Promise<any>): Promise<any[]>;
+```
 
-Async.mapLimit(limit: number, arr: any[], iterator: (item: any) => Promise<any>): Promise<any[]>;
-
-Async.parallel(tasks: (() => Promise<any>)[]): Promise<any[]>;
-
-Async.series(tasks: (() => Promise<any>)[]): Promise<any[]>;
-
-Async.parallelLimit(limit: number, tasks: (() => Promise<any>)[]): Promise<any[]>;
-
+Queue:
+```javascript
+Queue<T>.limit: number;
+Queue<T>.started: boolean;
+Queue<T>.paused: boolean;
+Queue<T>.killed: boolean;
+Queue<T>.running: number;
+Queue<T>.saturated?: () => void;
+Queue<T>.unsaturated?: () => void;
+Queue<T>.empty?: () => void;
+Queue<T>.drain?: () => void;
+Queue<T>.error?: (err: any) => void;
+Queue<T>.length: number;
+Queue<T>.idle: boolean;
+Queue<T>.pause(): void;
+Queue<T>.resume(): void;
+Queue<T>.push(task: T | T[]): Promise<T | T[]>;
+Queue<T>.unshift(task: T | T[]): Promise<T | T[]>;
+Queue<T>.remove(test: ((task: T) => boolean)): boolean;
+Queue<T>.kill(): void;
 ```
