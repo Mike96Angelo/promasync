@@ -1,0 +1,49 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": ["ESNEXT"],
+    "outDir": "./es2017",
+    "rootDir": "./src",
+    "removeComments": true,
+    "importHelpers": true,
+    "downlevelIteration": true,
+    "declaration": true,
+
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    "noUnusedLocals": true,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "paths": {
+      "src/": ["src/"]
+    },
+
+    "sourceRoot": "./src",
+    "sourceMap": true,
+    "inlineSources": true
+  },"exclude": [
+    "node_modules",
+    "dist",
+    "build"
+  ],
+  "filesGlob": [
+    "./src//.ts",
+    "./test//.ts",
+    "./typings/index.d.ts",
+    "./custom_typings//.d.ts",
+    "./node_modules/@types//.d.ts"
+  ],
+  "atom": {
+    "rewriteTsconfig": false
+  }
+}

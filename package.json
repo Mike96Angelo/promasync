@@ -1,0 +1,30 @@
+{
+  "name": "promasync",
+  "version": "1.0.0",
+  "description": "An async control flow for promises.",
+  "main": "es2015/promasync.js",
+  "types": "es2015/promasync.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mike96Angelo/promasync.git"
+  },
+  "keywords": [
+    "promise",
+    "async",
+    "control",
+    "flow",
+    "collection"
+  ],
+  "author": "Michaelangelo Jong",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Mike96Angelo/promasync/issues"
+  },
+  "homepage": "https://github.com/Mike96Angelo/promasync#readme",
+  "dependencies": {
+    "tslib": "^1.7.1"
+  }
+}
