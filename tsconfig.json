@@ -9,7 +9,6 @@
     "removeComments": true,
     "importHelpers": true,
     "downlevelIteration": true,
-    "declaration": true,
 
     "strict": true,
     "noImplicitAny": true,
@@ -26,12 +25,9 @@
     "baseUrl": "./",
     "paths": {
       "ts/": ["ts/"]
-    },
-
-    "sourceRoot": "./ts",
-    "sourceMap": true,
-    "inlineSources": true
-  },"exclude": [
+    }
+  },
+  "exclude": [
     "node_modules",
     "dist",
     "build"
