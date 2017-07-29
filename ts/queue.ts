@@ -1,29 +1,27 @@
-export type Worker<T> = (task: T) => Promise<T>
-
-class Task<T> {
+class Task<T, R> {
   task: T
-  promise: Promise<T>
-  resolve: (result: any) => void
+  promise: Promise<R>
+  resolve: (result: R) => void
   reject: (error: any) => void
 
   constructor(task: T) {
     let self = this
     self.task = task
-    self.promise = new Promise<T>((resolve, reject) => {
+    self.promise = new Promise<R>((resolve, reject) => {
       self.resolve = resolve
       self.reject = reject
     })
   }
 }
 
-export class Queue<T> {
+export class Queue<T, R> {
   limit: number
-  private worker: Worker<T>
+  private worker: ((task: T) => Promise<R>)
   started: boolean = false
   paused: boolean = false
   killed: boolean = false
   running: number = 0
-  private tasks: Task<T>[] = []
+  private tasks: Task<T, R>[] = []
 
   private _saturated: boolean = false
 
@@ -34,7 +32,7 @@ export class Queue<T> {
   drain?: () => void
   error?: (err: any) => void
 
-  constructor(limit: number, worker: Worker<T>) {
+  constructor(limit: number, worker: ((task: T) => Promise<R>)) {
     if (limit < 1) {
       throw new Error('limit must be greater then 0.')
     }
@@ -66,7 +64,7 @@ export class Queue<T> {
     }
   }
 
-  private async runWorker(task: Task<T>) {
+  private async runWorker(task: Task<T, R>) {
     this.started = true
     this.running++
 
@@ -82,7 +80,7 @@ export class Queue<T> {
     }
   }
 
-  private run(task?: Task<T>, unshift?: boolean) {
+  private run(task?: Task<T, R>, unshift?: boolean) {
     if (task) {
       if (unshift) {
         this.tasks.unshift(task)
@@ -110,17 +108,17 @@ export class Queue<T> {
     this.run()
   }
 
-  private async add(task: T|T[], unshift: boolean): Promise<T|T[]> {
+  private async add(task: T|T[], unshift: boolean): Promise<R|R[]> {
     if (this.killed) {
       throw new Error('CANNOT add tasks to the queue after calling Queue.kill().')
     }
 
     if (Array.isArray(task)) {
-      let awaits: Promise<T>[] = []
-      let results: T[] = []
+      let awaits: Promise<R>[] = []
+      let results: R[] = []
 
       for (let t of task) {
-        let work = new Task<T>(t)
+        let work = new Task<T, R>(t)
         this.run(work, unshift)
         awaits.push(work.promise)
       }
@@ -131,17 +129,17 @@ export class Queue<T> {
 
       return results
     } else {
-      let work = new Task<T>(task)
+      let work = new Task<T, R>(task)
       this.run(work, unshift)
       return await work.promise
     }
   }
 
-  push(task: T|T[]): Promise<T|T[]> {
+  push(task: T|T[]): Promise<R|R[]> {
     return this.add(task, false)
   }
 
-  unshift(task: T|T[]): Promise<T|T[]> {
+  unshift(task: T|T[]): Promise<R|R[]> {
     return this.add(task, true)
   }
 
@@ -162,6 +160,6 @@ export class Queue<T> {
   }
 }
 
-export function queue<T>(limit: number, worker: Worker<T>): Queue<T> {
-  return new Queue<T>(limit, worker)
+export function queue<T, R>(limit: number, worker: ((task: T) => Promise<R>)): Queue<T, R> {
+  return new Queue<T, R>(limit, worker)
 }

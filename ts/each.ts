@@ -1,7 +1,5 @@
-import {Iterator, IteratorResult} from './types'
-
-export async function each<T>(arr: T[], iterator: Iterator<T>) {
-  let awaits: IteratorResult<T>[] = []
+export async function each<T>(arr: T[], iterator: ((item: T) => Promise<any>)) {
+  let awaits: Promise<T>[] = []
   for (let item of arr) {
     awaits.push(iterator(item))
   }
@@ -11,18 +9,18 @@ export async function each<T>(arr: T[], iterator: Iterator<T>) {
   }
 }
 
-export async function eachSeries<T>(arr: T[], iterator: Iterator<T>) {
+export async function eachSeries<T>(arr: T[], iterator: ((item: T) => Promise<any>)) {
   for (let item of arr) {
     await iterator(item)
   }
 }
 
-export async function eachLimit<T>(limit: number, arr: T[], iterator: Iterator<T>) {
+export async function eachLimit<T>(limit: number, arr: T[], iterator: ((item: T) => Promise<any>)) {
   if (limit < 1) {
     throw new Error('limit must be greater then 0.')
   }
 
-  let awaits: IteratorResult<T>[] = []
+  let awaits: Promise<any>[] = []
 
   for (let i = 0; i < arr.length; i++) {
     let item = arr[i]

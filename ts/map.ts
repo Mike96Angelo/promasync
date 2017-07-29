@@ -1,12 +1,10 @@
-import {Iterator, IteratorResult, IteratorResults} from './types'
-
-export async function map<T>(arr: T[], iterator: Iterator<T>): IteratorResults<T> {
-  let awaits: IteratorResult<T>[] = []
+export async function map<T, R>(arr: T[], iterator: ((item: T) => Promise<R>)): Promise<R[]> {
+  let awaits: Promise<R>[] = []
   for (let item of arr) {
     awaits.push(iterator(item))
   }
 
-  let results: T[] = []
+  let results: R[] = []
 
   for (let item of awaits) {
     results.push(await item)
@@ -15,8 +13,8 @@ export async function map<T>(arr: T[], iterator: Iterator<T>): IteratorResults<T
   return results
 }
 
-export async function mapSeries<T>(arr: T[], iterator: Iterator<T>): IteratorResults<T> {
-  let results: T[] = []
+export async function mapSeries<T, R>(arr: T[], iterator: ((item: T) => Promise<R>)): Promise<R[]> {
+  let results: R[] = []
 
   for (let item of arr) {
     results.push(await iterator(item))
@@ -25,13 +23,13 @@ export async function mapSeries<T>(arr: T[], iterator: Iterator<T>): IteratorRes
   return results
 }
 
-export async function mapLimit<T>(limit: number, arr: T[], iterator: Iterator<T>): IteratorResults<T> {
+export async function mapLimit<T, R>(limit: number, arr: T[], iterator: ((item: T) => Promise<R>)): Promise<R[]> {
   if (limit < 1) {
     throw new Error('limit must be greater then 0.')
   }
 
-  let awaits: IteratorResult<T>[] = []
-  let results: T[] = []
+  let awaits: Promise<R>[] = []
+  let results: R[] = []
 
   for (let i = 0; i < arr.length; i++) {
     let item = arr[i]

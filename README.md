@@ -4,34 +4,18 @@ An async control flow for promises.
 ```
 $ npm install promasync --save
 ```
-imports
+import: (typescript)
 ```javascript
-// import: es3
+import * as Async from 'promasync/ts'
+```
+require:
+```javascript
+var Async = require('promasync') // (default: es2015)
 var Async = require('promasync/es3')
-// typescript
-import * as Async from 'promasync/es3'
-
-// import: es5
 var Async = require('promasync/es5')
-// typescript
-import * as Async from 'promasync/es5'
-
-// import: es2015 (default)
-var Async = require('promasync')
 var Async = require('promasync/es2015')
-// typescript
-import * as Async from 'promasync'
-import * as Async from 'promasync/es2015'
-
-// import: es2016
 var Async = require('promasync/es2016')
-// typescript
-import * as Async from 'promasync/es2016'
-
-// import: es2017
 var Async = require('promasync/es2017')
-// typescript
-import * as Async from 'promasync/es2017'
 ```
 
 ```javascript
@@ -39,48 +23,47 @@ import * as Async from 'promasync/es2017'
  ** Collections **
  *****************/
 
-Async.each<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<void>;
-Async.eachSeries<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<void>;
-Async.eachLimit<T>(limit: number, array: T[], iterator: (item: T) => Promise<T>): Promise<void>;
+Async.each<T>(arr: T[], iterator: ((item: T) => Promise<any>)): Promise<void>;
+Async.eachSeries<T>(arr: T[], iterator: ((item: T) => Promise<any>)): Promise<void>;
+Async.eachLimit<T>(limit: number, arr: T[], iterator: ((item: T) => Promise<any>)): Promise<void>;
 
-Async.filter<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
-Async.filterSeries<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
-Async.filterLimit<T>(limit: number, array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
+Async.filter<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<T[]>;
+Async.filterSeries<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<T[]>;
+Async.filterLimit<T>(limit: number, arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<T[]>;
 
-Async.map<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
-Async.mapSeries<T>(array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
-Async.mapLimit<T>(limit: number, array: T[], iterator: (item: T) => Promise<T>): Promise<T[]>;
+Async.map<T, R>(arr: T[], iterator: ((item: T) => Promise<R>)): Promise<R[]>;
+Async.mapSeries<T, R>(arr: T[], iterator: ((item: T) => Promise<R>)): Promise<R[]>;
+Async.mapLimit<T, R>(limit: number, arr: T[], iterator: ((item: T) => Promise<R>)): Promise<R[]>;
 
 /******************
  ** Control Flow **
  ******************/
 
-Async.run<T>(tasks: (() => Promise<T>)[]): Promise<T[]>;
-Async.runSeries<T>(tasks: (() => Promise<T>)[]): Promise<T[]>;
-Async.runLimit<T>(limit: number, tasks: (() => Promise<T>)[]): Promise<T[]>;
+Async.run<R>(tasks: (() => Promise<R>)[]): Promise<R[]>;
+Async.runSeries<R>(tasks: (() => Promise<R>)[]): Promise<R[]>;
+Async.runLimit<R>(limit: number, tasks: (() => Promise<R>)[]): Promise<R[]>;
 
-Async.queue<T>(limit: number, worker: ((task: T) => Promise<T>)): Queue<T>;
-
+Async.queue<T, R>(limit: number, worker: ((task: T) => Promise<R>)): Queue<T, R>;
 ```
 
 Queue:
 ```javascript
-Queue<T>.limit: number;
-Queue<T>.started: boolean;
-Queue<T>.paused: boolean;
-Queue<T>.killed: boolean;
-Queue<T>.running: number;
-Queue<T>.saturated?: () => void;
-Queue<T>.unsaturated?: () => void;
-Queue<T>.empty?: () => void;
-Queue<T>.drain?: () => void;
-Queue<T>.error?: (err: any) => void;
-Queue<T>.length: number;
-Queue<T>.idle: boolean;
-Queue<T>.pause(): void;
-Queue<T>.resume(): void;
-Queue<T>.push(task: T | T[]): Promise<T | T[]>;
-Queue<T>.unshift(task: T | T[]): Promise<T | T[]>;
-Queue<T>.remove(test: ((task: T) => boolean)): boolean;
-Queue<T>.kill(): void;
+Queue<T, R>.limit: number;
+Queue<T, R>.started: boolean;
+Queue<T, R>.paused: boolean;
+Queue<T, R>.killed: boolean;
+Queue<T, R>.running: number;
+Queue<T, R>.saturated?: () => void;
+Queue<T, R>.unsaturated?: () => void;
+Queue<T, R>.empty?: () => void;
+Queue<T, R>.drain?: () => void;
+Queue<T, R>.error?: (err: any) => void;
+Queue<T, R>.length: number; // readonly
+Queue<T, R>.idle: boolean; // readonly
+Queue<T, R>.pause(): void;
+Queue<T, R>.resume(): void;
+Queue<T, R>.push(task: T | T[]): Promise<R | R[]>;
+Queue<T, R>.unshift(task: T | T[]): Promise<R | R[]>;
+Queue<T, R>.remove(test: ((task: T) => boolean)): boolean;
+Queue<T, R>.kill(): void;
 ```

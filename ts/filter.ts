@@ -1,8 +1,5 @@
-import {Iterator, IteratorResult, IteratorResults} from './types'
-
-
-export async function filter<T>(arr: T[], iterator: Iterator<T>): IteratorResults<T> {
-  let awaits: IteratorResult<T>[] = []
+export async function filter<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<T[]> {
+  let awaits: Promise<boolean>[] = []
   for (let item of arr) {
     awaits.push(iterator(item))
   }
@@ -18,7 +15,7 @@ export async function filter<T>(arr: T[], iterator: Iterator<T>): IteratorResult
   return results
 }
 
-export async function filterSeries<T>(arr: T[], iterator: Iterator<T>): IteratorResults<T> {
+export async function filterSeries<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<T[]> {
   let results: T[] = []
 
   for (let i = 0; i < arr.length; i++) {
@@ -30,12 +27,12 @@ export async function filterSeries<T>(arr: T[], iterator: Iterator<T>): Iterator
   return results
 }
 
-export async function filterLimit<T>(limit: number, arr: T[], iterator: Iterator<T>): IteratorResults<T> {
+export async function filterLimit<T>(limit: number, arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<T[]> {
   if (limit < 1) {
     throw new Error('limit must be greater then 0.')
   }
 
-  let awaits: IteratorResult<T>[] = []
+  let awaits: Promise<boolean>[] = []
   let results: T[] = []
 
   for (let i = 0; i < arr.length; i++) {

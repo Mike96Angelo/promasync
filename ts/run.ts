@@ -1,13 +1,10 @@
-import {Task, TaskResult, TaskResults} from './types'
-
-
-export async function run<T>(tasks: Task<T>[]): TaskResults<T> {
-  let awaits: TaskResult<T>[] = []
+export async function run<R>(tasks: (() => Promise<R>)[]): Promise<R[]> {
+  let awaits: Promise<R>[] = []
   for (let task of tasks) {
     awaits.push(task())
   }
 
-  let results: T[] = []
+  let results: R[] = []
 
   for (let item of awaits) {
     results.push(await item)
@@ -16,8 +13,8 @@ export async function run<T>(tasks: Task<T>[]): TaskResults<T> {
   return results
 }
 
-export async function runSeries<T>(tasks: Task<T>[]): TaskResults<T> {
-  let results: T[] = []
+export async function runSeries<R>(tasks: (() => Promise<R>)[]): Promise<R[]> {
+  let results: R[] = []
 
   for (let task of tasks) {
     results.push(await task())
@@ -26,13 +23,13 @@ export async function runSeries<T>(tasks: Task<T>[]): TaskResults<T> {
   return results
 }
 
-export async function runLimit<T>(limit: number, tasks: Task<T>[]): TaskResults<T> {
+export async function runLimit<R>(limit: number, tasks: (() => Promise<R>)[]): Promise<R[]> {
   if (limit < 1) {
     throw new Error('limit must be greater then 0.')
   }
 
-  let awaits: TaskResult<T>[] = []
-  let results: T[] = []
+  let awaits: Promise<R>[] = []
+  let results: R[] = []
 
   for (let i = 0; i < tasks.length; i++) {
     let task = tasks[i]
