@@ -23,17 +23,45 @@ var Async = require('promasync/es2017')
  ** Collections **
  *****************/
 
+Async.concat<T, R>(arr: T[], iterator: ((item: T) => Promise<R[]>)): Promise<R[]>;
+Async.concatSeries<T, R>(arr: T[], iterator: ((item: T) => Promise<R[]>)): Promise<R[]>;
+Async.concatLimit<T, R>(limit: number, arr: T[], iterator: ((item: T) => Promise<R[]>)): Promise<R[]>;
+
 Async.each<T>(arr: T[], iterator: ((item: T) => Promise<any>)): Promise<void>;
 Async.eachSeries<T>(arr: T[], iterator: ((item: T) => Promise<any>)): Promise<void>;
 Async.eachLimit<T>(limit: number, arr: T[], iterator: ((item: T) => Promise<any>)): Promise<void>;
+
+Async.every<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<boolean>;
+Async.everySeries<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<boolean>;
+Async.everyLimit<T>(limit: number, arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<boolean>;
 
 Async.filter<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<T[]>;
 Async.filterSeries<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<T[]>;
 Async.filterLimit<T>(limit: number, arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<T[]>;
 
+Async.groupBy<T>(arr: T[], iterator: ((item: T) => Promise<string>)): Promise<{[key: string]: T[]}>;
+Async.groupBySeries<T>(arr: T[], iterator: ((item: T) => Promise<string>)): Promise<{[key: string]: T[]}>;
+Async.groupByLimit<T>(limit: number, arr: T[], iterator: ((item: T) => Promise<string>)): Promise<{[key: string]: T[]}>;
+
+Async.groupResultBy<T, R>(arr: T[], iterator: ((item: T) => Promise<[string, R]>)): Promise<{[key: string]: R[]}>;
+Async.groupResultBySeries<T, R>(arr: T[], iterator: ((item: T) => Promise<[string, R]>)): Promise<{[key: string]: R[]}>;
+Async.groupResultByLimit<T, R>(limit: number, arr: T[], iterator: ((item: T) => Promise<[string, R]>)): Promise<{[key: string]: R[]}>;
+
 Async.map<T, R>(arr: T[], iterator: ((item: T) => Promise<R>)): Promise<R[]>;
 Async.mapSeries<T, R>(arr: T[], iterator: ((item: T) => Promise<R>)): Promise<R[]>;
 Async.mapLimit<T, R>(limit: number, arr: T[], iterator: ((item: T) => Promise<R>)): Promise<R[]>;
+
+Async.some<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<boolean>;
+Async.someSeries<T>(arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<boolean>;
+Async.someLimit<T>(limit: number, arr: T[], iterator: ((item: T) => Promise<boolean>)): Promise<boolean>;
+
+Async.sortBy<T, C>(arr: T[], iterator: ((item: T) => Promise<C>)): Promise<T[]>;
+Async.sortBySeries<T, C>(arr: T[], iterator: ((item: T) => Promise<C>)): Promise<T[]>;
+Async.sortByLimit<T, C>(limit: number, arr: T[], iterator: ((item: T) => Promise<C>)): Promise<T[]>;
+
+Async.sortResultBy<T, C, R>(arr: T[], iterator: ((item: T) => Promise<[C, R]>)): Promise<R[]>;
+Async.sortResultBySeries<T, C, R>(arr: T[], iterator: ((item: T) => Promise<[C, R]>)): Promise<R[]>;
+Async.sortResultByLimit<T, C, R>(limit: number, arr: T[], iterator: ((item: T) => Promise<[C, R]>)): Promise<R[]>;
 
 /******************
  ** Control Flow **
