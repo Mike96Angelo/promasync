@@ -1,6 +1,6 @@
 {
   "name": "promasync",
-  "version": "1.2.0",
+  "version": "1.2.2",
   "description": "An async control flow for promises.",
   "main": "es2015/index.js",
   "types": "es2015/index.d.ts",
